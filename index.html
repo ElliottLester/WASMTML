@@ -1,0 +1,21 @@
+<!doctype html>
+
+<script type="module">
+  async function init() {
+    const { instance } = await WebAssembly.instantiateStreaming(
+      fetch("print.wasm"),
+    );
+    var mem = instance.exports.memory.buffer;
+    var ptr = 121072;
+    var len = ptr - mem.byteLength;
+    var mem = new Uint8Array(mem, ptr, 128);
+
+    var res_len = instance.exports.wasm_test(ptr, 128);
+
+    var UTF8Decoder =
+      typeof TextDecoder != "undefined" ? new TextDecoder() : undefined;
+    let output = UTF8Decoder.decode(mem);
+    console.log(output);
+  }
+  init();
+</script>
