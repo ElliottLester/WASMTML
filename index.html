@@ -6,7 +6,7 @@
       fetch("print.wasm"),
     );
     var mem = instance.exports.memory.buffer;
-    var ptr = 121072;
+    var ptr = 2048;
     var len = ptr - mem.byteLength;
     var mem = new Uint8Array(mem, ptr, 128);
 
@@ -16,6 +16,14 @@
       typeof TextDecoder != "undefined" ? new TextDecoder() : undefined;
     let output = UTF8Decoder.decode(mem);
     console.log(output);
+    const parser = new DOMParser();
+    let fragment = parser.parseFromString(output, "text/html");
+    let root = document.getElementById("test_wasm_root");
+    root.appendChild(fragment.childNodes[0]);
   }
   init();
 </script>
+
+<body>
+  <div id="test_wasm_root"></div>
+</body>
